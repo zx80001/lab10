@@ -14,7 +14,7 @@ app.get('/restaurant/name/:x', function(req,res) {
 	var db = mongoose.connection;
 	db.on('error', console.error.bind(console, 'connection error:'));
 	db.once('open', function (callback) {
-		var restaurant = mongoose.model('Restaurant', restaurantSchema);
+		var Restaurant = mongoose.model('Restaurant', restaurantSchema);
 		//Kitten.find({name: new RegExp(req.params.x)},function(err,results){
 		Restaurant.find({name: req.params.x},function(err,results){
 			if (err) {
