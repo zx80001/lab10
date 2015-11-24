@@ -9,14 +9,17 @@ var restaurantSchema = require('./models/restaurant');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.get('/restaurant/name/:x', function(req,res) {
+app.get('/restaurant/:attrib/:attrib_value', function(req,res) {
+	console.log("find with one attrib");
+	var criteria = {};
+	criteria[req.params.attrib] = req.params.attrib_value;
+
 	mongoose.connect(MONGODBURL);
 	var db = mongoose.connection;
 	db.on('error', console.error.bind(console, 'connection error:'));
 	db.once('open', function (callback) {
 		var Restaurant = mongoose.model('Restaurant', restaurantSchema);
-		//Kitten.find({name: new RegExp(req.params.x)},function(err,results){
-		Restaurant.find({name: req.params.x},function(err,results){
+		Restaurant.find(criteria,function(err,results){
 			if (err) {
 				console.log("Error: " + err.message);
 				res.write(err.message);
@@ -29,59 +32,17 @@ app.get('/restaurant/name/:x', function(req,res) {
 		});
 	});
 });
-
-/*app.get('/kitty/age/:x', function(req,res) {
-	mongoose.connect(MONGODBURL);
-	var db = mongoose.connection;
-	db.on('error', console.error.bind(console, 'connection error:'));
-	db.once('open', function (callback) {
-		var Kitten = mongoose.model('Kitten', kittySchema);
-		//Kitten.find({name: new RegExp(req.params.x)},function(err,results){
-		Kitten.find({age: req.params.x},function(err,results){
-			if (err) {
-				console.log("Error: " + err.message);
-				res.write(err.message);
-			}
-			else {
-				db.close();
-				console.log('Found: ',results.length);
-				res.json(results);
-			}
-		});
-	});
-});
-
-app.get('/kitty/month/:x', function(req,res) {
-	mongoose.connect(MONGODBURL);
-	var db = mongoose.connection;
-	db.on('error', console.error.bind(console, 'connection error:'));
-	db.once('open', function (callback) {
-		var Kitten = mongoose.model('Kitten', kittySchema);
-		//Kitten.find({name: new RegExp(req.params.x)},function(err,results){
-		Kitten.find({'birthday.month': req.params.x},function(err,results){
-			if (err) {
-				console.log("Error: " + err.message);
-				res.write(err.message);
-			}
-			else {
-				db.close();
-				console.log('Found: ',results.length);
-				res.json(results);
-			}
-		});
-	});
-});
-
-app.get('/kitty/birthday/:attrib/:attrib/:attrib_value', function(req,res) {
+app.get('/restaurant/:attrib/:attrib_value/:attrib/:attrib_value', function(req,res) {
+	console.log("find with 2 attrib");
 	var criteria = {};
-	criteria["birthday."+req.params.attrib] = req.params.attrib_value;
+	criteria[req.params.attrib] = req.params.attrib_value;
 
 	mongoose.connect(MONGODBURL);
 	var db = mongoose.connection;
 	db.on('error', console.error.bind(console, 'connection error:'));
 	db.once('open', function (callback) {
-		var Kitten = mongoose.model('Kitten', kittySchema);
-		Kitten.find(criteria,function(err,results){
+		var Restaurant = mongoose.model('Restaurant', restaurantSchema);
+		Restaurant.find(criteria,function(err,results){
 			if (err) {
 				console.log("Error: " + err.message);
 				res.write(err.message);
@@ -94,8 +55,57 @@ app.get('/kitty/birthday/:attrib/:attrib/:attrib_value', function(req,res) {
 		});
 	});
 });
-*/
-app.post('/restaurant/name', function(req,res) {
+
+		
+app.get('/restaurant/address/:attrib/:attrib_value', function(req,res) {
+	console.log("find address/")
+	var criteria = {};
+	criteria["address."+req.params.attrib] = req.params.attrib_value;
+
+	mongoose.connect(MONGODBURL);
+	var db = mongoose.connection;
+	db.on('error', console.error.bind(console, 'connection error:'));
+	db.once('open', function (callback) {
+		var Restaurant = mongoose.model('Restaurant', restaurantSchema);
+		Restaurant.find(criteria,function(err,results){
+			if (err) {
+				console.log("Error: " + err.message);
+				res.write(err.message);
+			}
+			else {
+				db.close();
+				console.log('Found: ',results.length);
+				res.json(results);
+			}
+		});
+	});
+});
+
+app.get('/restaurant/address/:attrib/:attrib_value/:attrib_value', function(req,res) {
+	console.log("find coord with two value/")
+	var criteria = {};
+	criteria["address."+req.params.attrib] = req.params.attrib_value;
+
+	mongoose.connect(MONGODBURL);
+	var db = mongoose.connection;
+	db.on('error', console.error.bind(console, 'connection error:'));
+	db.once('open', function (callback) {
+		var Restaurant = mongoose.model('Restaurant', restaurantSchema);
+		Restaurant.find(criteria,function(err,results){
+			if (err) {
+				console.log("Error: " + err.message);
+				res.write(err.message);
+			}
+			else {
+				db.close();
+				console.log('Found: ',results.length);
+				res.json(results);
+			}
+		});
+	});
+});
+
+app.post('/restaurant', function(req,res) {
 	mongoose.connect(MONGODBURL);
 	var db = mongoose.connection;
 	db.on('error', console.error.bind(console, 'connection error:'));
@@ -109,6 +119,7 @@ app.post('/restaurant/name', function(req,res) {
 			else {
 				db.close();
 				res.end('Done',200);
+				console.log("add successful")
 			}
 		});
 	});
